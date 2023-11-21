@@ -3,6 +3,8 @@ CREATE TABLE TB_GIVEWIN_DOADOR (
     nome VARCHAR(255) NOT NULL,
     cpf VARCHAR(20) NOT NULL,
     senha VARCHAR(255) NOT NULL,
+    genero VARCHAR(20) CHECK (genero IN ('Feminino', 'Masculino', 'Nao Binario', 'Outros')) NOT NULL,
+    estado VARCHAR(30) CHECK (estado IN ('Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins')) NOT NULL,	
     dataNascimento DATE NOT NULL,
     email VARCHAR(255) NOT NULL,
     pontuacao NUMBER
