@@ -1,3 +1,88 @@
+-- COMANDOS DDL
+
+CREATE TABLE TB_GIVEWIN_DOADOR (
+    id_doador NUMBER PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    cpf VARCHAR(20) NOT NULL,
+    senha VARCHAR(255) NOT NULL,
+    genero VARCHAR(20) CHECK (genero IN ('Feminino', 'Masculino', 'Nao Binario', 'Outros')) NOT NULL,
+    estado VARCHAR(30) CHECK (estado IN ('Acre', 'Alagoas', 'Amapá', 'Amazonas', 'Bahia', 'Ceará', 'Distrito Federal', 'Espírito Santo', 'Goiás', 'Maranhão', 'Mato Grosso', 'Mato Grosso do Sul', 'Minas Gerais', 'Pará', 'Paraíba', 'Paraná', 'Pernambuco', 'Piauí', 'Rio de Janeiro', 'Rio Grande do Norte', 'Rio Grande do Sul', 'Rondônia', 'Roraima', 'Santa Catarina', 'São Paulo', 'Sergipe', 'Tocantins')) NOT NULL,	
+    email VARCHAR(255) NOT NULL,
+    pontuacao NUMBER
+);
+
+CREATE TABLE TB_GIVEWIN_RECEPTOR (
+    id_receptor NUMBER PRIMARY KEY,
+    razaoSocial VARCHAR(255) NOT NULL,
+    nomeFantasia VARCHAR(255),
+    cnpj VARCHAR(20) NOT NULL,
+    senha VARCHAR(255) NOT NULL
+);
+
+CREATE TABLE TB_GIVEWIN_TIPO_DOACAO (
+    id_tipo_doacao NUMBER PRIMARY KEY,
+    nome VARCHAR(255) NOT NULL,
+    pontuacao_doacao NUMBER NOT NULL
+);
+
+CREATE TABLE TB_GIVEWIN_DOACAO (
+    id_doacao NUMBER PRIMARY KEY,
+    id_tipo_doacao NUMBER NOT NULL,
+    id_doador NUMBER NOT NULL,
+    id_receptor NUMBER NOT NULL,
+    FOREIGN KEY (id_tipo_doacao) REFERENCES TB_GIVEWIN_TIPO_DOACAO(id_tipo_doacao),
+    FOREIGN KEY (id_doador) REFERENCES TB_GIVEWIN_DOADOR(id_doador),
+    FOREIGN KEY (id_receptor) REFERENCES TB_GIVEWIN_RECEPTOR(id_receptor)
+);
+
+CREATE TABLE TB_GIVEWIN_PARCEIRO (
+    id_parceiro NUMBER PRIMARY KEY,
+    razaoSocial VARCHAR(255) NOT NULL,
+    nomeFantasia VARCHAR(255),
+    cnpj VARCHAR(20) NOT NULL
+);
+
+CREATE TABLE TB_GIVEWIN_CUPOM (
+    id_cupom NUMBER PRIMARY KEY,
+    quantidade NUMBER NOT NULL,
+    valor_desconto NUMBER NOT NULL,
+    cupom_ativo VARCHAR(5)CHECK(cupom_ativo IN('FALSE', 'TRUE')) NOT NULL,
+    id_parceiro NUMBER,
+    FOREIGN KEY (id_parceiro) REFERENCES TB_GIVEWIN_PARCEIRO(id_parceiro)
+);
+
+CREATE TABLE TB_GIVEWIN_CUPOM_DOADOR (
+    id_cupom_doador NUMBER,
+    id_cupom NUMBER,
+    id_doador NUMBER,
+    codigo_gerado VARCHAR(255),
+    dt_utilizacao DATE,
+    PRIMARY KEY (id_cupom, id_doador),
+    FOREIGN KEY (id_cupom) REFERENCES TB_GIVEWIN_CUPOM(id_cupom),
+    FOREIGN KEY (id_doador) REFERENCES TB_GIVEWIN_DOADOR(id_doador)
+);
+
+CREATE TABLE TB_GIVEWIN_ERROS (
+    id_erro NUMBER, 
+    data_erro DATE, 
+    cod_erro NUMBER, 
+    desc_erro VARCHAR(2000)
+);
+
+
+--SEQUENCES PARA GERAR ID
+
+CREATE SEQUENCE seq_tb_givewin_doador START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_tipo_doacao START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_cupom START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_receptor START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_parceiro START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_doacao START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_cupom_doador START WITH 1 INCREMENT BY 1;
+CREATE SEQUENCE seq_tb_givewin_erros START WITH 1 INCREMENT BY 1;
+
+--- Procedure para Carga Inicial
+
 CREATE OR REPLACE PROCEDURE PROC_GIVEWIN_CARGAINICIAL IS
 BEGIN
 
@@ -101,5 +186,154 @@ END PROC_GIVEWIN_CARGAINICIAL;
 SET SERVEROUTPUT ON;
 BEGIN
     PROC_GIVEWIN_CARGAINICIAL;
+END;
+/
+
+--- Procedure: Comando DQL para verificar doações por tipo
+
+CREATE OR REPLACE PROCEDURE PROC_DOADOR_POR_TIPO_DOACAO (
+    p_tipo_doacao_id NUMBER
+)
+AS
+    CURSOR cursor_doadores IS
+        SELECT DISTINCT d.id_doador, d.nome
+        FROM TB_GIVEWIN_DOACAO doac
+        JOIN TB_GIVEWIN_DOADOR d ON doac.id_doador = d.id_doador
+        JOIN TB_GIVEWIN_TIPO_DOACAO td ON doac.id_tipo_doacao = td.id_tipo_doacao
+        WHERE td.id_tipo_doacao = p_tipo_doacao_id;
+
+    var_id_doador TB_GIVEWIN_DOADOR.id_doador%TYPE;
+    var_nome_doador TB_GIVEWIN_DOADOR.nome%TYPE;
+    var_resultados NUMBER := 1;
+BEGIN
+    OPEN cursor_doadores;
+
+    FETCH cursor_doadores INTO var_id_doador, var_nome_doador;
+    IF cursor_doadores%NOTFOUND THEN
+        var_resultados := 0;
+    END IF;
+
+    IF var_resultados = 1 THEN
+        DBMS_OUTPUT.PUT_LINE('Doadores encontrados:');
+        LOOP
+            DBMS_OUTPUT.PUT_LINE(var_id_doador || ' | ' || var_nome_doador);
+            FETCH cursor_doadores INTO var_id_doador, var_nome_doador;
+            EXIT WHEN cursor_doadores%NOTFOUND;
+        END LOOP;
+    ELSE
+        DBMS_OUTPUT.PUT_LINE('Nenhum doador encontrado para o tipo de doação especificado.');
+    END IF;
+
+    CLOSE cursor_doadores;
+END PROC_DOADOR_POR_TIPO_DOACAO;
+/
+
+SET SERVEROUTPUT ON;
+DECLARE
+    tipo_doacao_id NUMBER := 1;
+BEGIN
+    PROC_DOADOR_POR_TIPO_DOACAO(tipo_doacao_id);
+END;
+/
+
+
+--- Procedure: Comando DQL para puxar status do usuario por numero de doações
+
+CREATE OR REPLACE PROCEDURE PROC_CONSULTA_STATUS_DOADOR (
+    p_id_doador NUMBER
+)
+AS
+    CURSOR cursor_info_doador IS
+        SELECT
+            d.id_doador,
+            d.nome,
+            COUNT(da.id_doacao) AS total_doacoes
+        FROM
+            TB_GIVEWIN_DOADOR d
+        LEFT JOIN
+            TB_GIVEWIN_DOACAO da ON d.id_doador = da.id_doador
+        WHERE
+            d.id_doador = p_id_doador
+        GROUP BY
+            d.id_doador, d.nome;
+
+    var_registro_doador cursor_info_doador%ROWTYPE;
+BEGIN
+    OPEN cursor_info_doador;
+
+    DBMS_OUTPUT.PUT_LINE('Nome | Total de Doações | Status');
+
+    LOOP
+        FETCH cursor_info_doador INTO var_registro_doador;
+        EXIT WHEN cursor_info_doador%NOTFOUND;
+
+        -- Tomada de decisão: Status baseado no número de doações
+        IF var_registro_doador.total_doacoes > 5 THEN
+            DBMS_OUTPUT.PUT_LINE(
+                var_registro_doador.nome || ' | ' ||
+                var_registro_doador.total_doacoes || ' | Doador VIP'
+            );
+        ELSIF var_registro_doador.total_doacoes >= 1 AND var_registro_doador.total_doacoes <= 5 THEN
+            DBMS_OUTPUT.PUT_LINE(
+                var_registro_doador.nome || ' | ' ||
+                var_registro_doador.total_doacoes || ' | Doador Ativo'
+            );
+        ELSE
+            DBMS_OUTPUT.PUT_LINE(
+                var_registro_doador.nome || ' | ' ||
+                var_registro_doador.total_doacoes || ' | Inativo'
+            );
+        END IF;
+    END LOOP;
+
+    CLOSE cursor_info_doador;
+END PROC_CONSULTA_STATUS_DOADOR;
+/
+
+
+SET SERVEROUTPUT ON;
+BEGIN
+    PROC_CONSULTA_STATUS_DOADOR(5);
+END;
+/
+
+
+--- Função para somar os pontos de acordo com as doações feitas pelo usuario
+
+CREATE OR REPLACE FUNCTION atualizar_pontuacao_doador(p_id_doador IN NUMBER)
+RETURN NUMBER
+IS
+    pontuacao_total NUMBER := 0;
+BEGIN
+    SELECT SUM(tipo.pontuacao_doacao)
+    INTO pontuacao_total
+    FROM TB_GIVEWIN_DOACAO doacao
+    JOIN TB_GIVEWIN_TIPO_DOACAO tipo ON doacao.id_tipo_doacao = tipo.id_tipo_doacao
+    WHERE doacao.id_doador = p_id_doador;
+
+    UPDATE TB_GIVEWIN_DOADOR
+    SET pontuacao = pontuacao + pontuacao_total
+    WHERE id_doador = p_id_doador;
+
+
+    RETURN pontuacao_total;
+END;
+/
+
+SET SERVEROUTPUT ON;
+DECLARE
+    var_id_doador NUMBER := 2;
+    var_nome_doador VARCHAR2(100);
+    pontuacao_total NUMBER;
+BEGIN
+    SELECT nome
+    INTO var_nome_doador
+    FROM TB_GIVEWIN_DOADOR
+    WHERE id_doador = var_id_doador;
+    pontuacao_total := atualizar_pontuacao_doador(var_id_doador);
+    IF pontuacao_total >= 0 THEN
+     DBMS_OUTPUT.PUT_LINE('Doador: ' || var_nome_doador);
+        DBMS_OUTPUT.PUT_LINE('Pontuação total do doador: ' || pontuacao_total);
+    END IF;
 END;
 /
