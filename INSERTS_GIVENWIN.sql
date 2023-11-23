@@ -1,20 +1,20 @@
 BEGIN
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('João da Silva', '123.456.789-00', '123456', 'Masculino', 'São Paulo', '1990-01-01', 'joao.silva@gmail.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES('Maria da Silva', '987.654.321-00', '543219', 'Feminino', 'Bahia', '1992-02-02', 'maria.silva@email.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES('Jo Pereira', '098.765.432-10', '213456', 'Nao Binario', 'Ceará', '1994-03-03', 'jo.pereira@fiap.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Ana Lopes', '876.543.210-98', '654321', 'Outros', 'Distrito Federal', '1996-04-04', 'ana.lopes@email.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Pedro Santos', '765.432.109-87', '765432', 'Feminino', 'Espírito Santo', '1998-05-05', 'pedro.santos@uol.com.br', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Flávia Souza', '654.321.098-76', '876543', 'Masculino', 'Goiás', '2000-06-06', 'flavia.souza@yahoo.com.br', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Ariel Martins', '543.210.987-65', '987654', 'Nao Binario', 'Maranhão', '2002-07-07', 'ariel.martins@gmail.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Bruna Oliveira', '432.109.876-54', '098765', 'Feminino', 'Mato Grosso', '2004-08-08', 'bruna.oliveira@outlook.com', 0);
-    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, dataNascimento, email, pontuacao) VALUES ('Rafaela Andrade', '321.098.765-43', '123456', 'Feminino', 'Mato Grosso do Sul', '2006-09-09', 'rafaela.andrade@hotmail.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('João da Silva', '123.456.789-00', '123456', 'Masculino', 'São Paulo', 'joao.silva@gmail.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES('Maria da Silva', '987.654.321-00', '543219', 'Feminino', 'Bahia', 'maria.silva@email.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES('Jo Pereira', '098.765.432-10', '213456', 'Nao Binario', 'Ceará', 'jo.pereira@fiap.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Ana Lopes', '876.543.210-98', '654321', 'Outros', 'Distrito Federal', 'ana.lopes@email.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Pedro Santos', '765.432.109-87', '765432', 'Feminino', 'Espírito Santo', 'pedro.santos@uol.com.br', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Flávia Souza', '654.321.098-76', '876543', 'Masculino', 'Goiás', 'flavia.souza@yahoo.com.br', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Ariel Martins', '543.210.987-65', '987654', 'Nao Binario', 'Maranhão', 'ariel.martins@gmail.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Bruna Oliveira', '432.109.876-54', '098765', 'Feminino', 'Mato Grosso', 'bruna.oliveira@outlook.com', 0);
+    INSERT INTO TB_GIVEWIN_DOADOR (nome, cpf, senha, genero, estado, email, pontuacao) VALUES ('Rafaela Andrade', '321.098.765-43', '123456', 'Feminino', 'Mato Grosso do Sul', 'rafaela.andrade@hotmail.com', 0);
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -27,11 +27,11 @@ BEGIN
 
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-        INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+        INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-        INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+        INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-        INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+        INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -43,11 +43,11 @@ BEGIN
     INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, disponivel, codigo_gerado, id_parceiro) VALUES (6, 5, 60, FALSE, 'CUPOM60', 6);
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -58,11 +58,11 @@ BEGIN
     INSERT INTO TB_GIVEWIN_RECEPTOR (id_receptor, razaoSocial, nomeFantasia, cnpj, senha) VALUES (5,'Uniao Brasileira De Educacao E Assistencia','HOSPITAL SAO LUCAS DA PUCRS',  88630413000796, 'HSLPUCRS');
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -73,11 +73,11 @@ BEGIN
     INSERT INTO TB_GIVEWIN_PARCEIRO (id_parceiro, razaoSocial, nomeFantasia, cnpj, senha) VALUES (5,'IFOOD.COM AGENCIA DE RESTAURANTES ONLINE S.A.','iFood', 14.380.200/0001-21, 'pedeumifood');
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -88,11 +88,11 @@ BEGIN
     INSERT INTO TB_GIVEWIN_DOACAO (id_doacao, id_tipo_doacao,id_doador,id_receptor) VALUES (5,1,2,2);
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;
 
 BEGIN
@@ -103,9 +103,9 @@ BEGIN
     INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (5,1,2,2);
     EXCEPTION
         WHEN NO_DATA_FOUND THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (1, SYSDATE, SQLCODE, SQLERRM);
         WHEN DUP_VAL_ON_INDEX THEN
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (2, SYSDATE, SQLCODE, SQLERRM);
         WHEN OTHERS THEN 
-            INSERT INTO TB_GIVEWIN_ERROS (id, date, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
+            INSERT INTO TB_GIVEWIN_ERROS (id, data_erro, cod_erro, desc_erro) VALUES (3, SYSDATE, SQLCODE, SQLERRM);
 END;

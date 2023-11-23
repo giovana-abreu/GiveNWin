@@ -1,71 +1,63 @@
-#include <Adafruit_ILI9341.h>
-#include <Adafruit_GFX.h>
+#include <WiFi.h>
+#include <PubSubClient.h>
 
-int led = 13; 
-int sensor = 22;
-int statusSensor = LOW;
-int value = 0;
+const char* ssid = "Wokwi-GUEST";
+const char* password = "";
+const char* mqttServer = "test.mosquitto.org";
+const int mqttPort = 1883;
 
-#define TFT_CS 15
-#define TFT_DC 2
+const int pinPIR = 13;
+const char* topic = "movimento";
 
-Adafruit_ILI9341 tft = Adafruit_ILI9341(TFT_CS, TFT_DC);
+WiFiClient espClient;
+PubSubClient client(espClient);
 
 void setup() {
-  pinMode(led, OUTPUT);
-  pinMode(sensor, INPUT);
-
+  pinMode(pinPIR, INPUT);
   Serial.begin(9600);
 
-  tft.begin();
-  tft.setRotation(1);
+  WiFi.begin(ssid, password);
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+  }
+  Serial.println("");
+  Serial.println("WiFi connected");
+  Serial.println("IP address: ");
+  Serial.println(WiFi.localIP());
+
+  client.setServer(mqttServer, mqttPort);
 }
 
 void loop() {
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setCursor(10, 10);
-  tft.setTextSize(2);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.print("Quer ganhar pontos extras? Escaneie o QR Code no seu app: ");
+  if (!client.connected()) {
+    reconnect();
+  }
+  client.loop();
 
-  while (true) {
-    value = digitalRead(sensor);
-
-    if (value == HIGH) {
-      if (statusSensor == LOW) {
-        Serial.println("Lendo informações...");
-
-        Serial.print("CPF do cliente: ");
-        while (Serial.available() == 0) {
-          delay(10);
-        }
-        int cpfCliente = Serial.parseInt();
-
-        displayCPF(cpfCliente);
-
-        statusSensor = HIGH;
-        break;
-      }
-    } else {
-      digitalWrite(led, LOW);
-      if (statusSensor == HIGH) {
-        Serial.println("Operação Concluída!");
-        tft.fillScreen(ILI9341_BLACK);
-        statusSensor = LOW;
-        break;
-      }
-    }
+  if (digitalRead(pinPIR) == HIGH) {
+    Serial.println("Detectado Movimento");
+    client.publish(topic, "Movimento");
+    delay(5000);
+  } else {
+    Serial.println("Não detectado");
+    client.publish(topic, "Sem Movimento");
+    delay(5000); 
   }
 }
 
-void displayCPF(int cpfCliente) {
-  tft.fillScreen(ILI9341_BLACK);
-  tft.setTextSize(2);
-  tft.setTextColor(ILI9341_WHITE);
-  tft.setCursor(10, 40);
-  digitalWrite(led, HIGH);
-  tft.print("CPF confirmado! Seus pontos serão adicionados automaticamente à conta associada a esse CPF ");
-  tft.setCursor(10, 70);
-  delay(5000);
-  tft.fillScreen(ILI9341_BLACK);
+void reconnect() {
+  while (!client.connected()) {
+    Serial.println("Attempting MQTT connection...");
+    String clientId = "ESP32Client-";
+    clientId += String(random(0xffff), HEX);
+    if (client.connect(clientId.c_str())) {
+      Serial.println("Connected to MQTT broker");
+    } else {
+      Serial.print("Failed, rc=");
+      Serial.print(client.state());
+      Serial.println(" Retry in 5 seconds");
+      delay(5000);
+    }
+  }
 }
