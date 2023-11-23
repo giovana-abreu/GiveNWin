@@ -34,12 +34,12 @@ BEGIN
     INSERT INTO TB_GIVEWIN_PARCEIRO (id_parceiro, razaoSocial, nomeFantasia, cnpj) VALUES (seq_tb_givewin_parceiro.NEXTVAL,'CENTAURO LTDA','Centauro', '74.501.131/0001-99');
     INSERT INTO TB_GIVEWIN_PARCEIRO (id_parceiro, razaoSocial, nomeFantasia, cnpj) VALUES (seq_tb_givewin_parceiro.NEXTVAL, 'IFOOD.COM AGENCIA DE RESTAURANTES ONLINE S.A.', 'iFood', '14.380.200/0001-21');
     -- TB_GIVEWIN_CUPOM
-    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 100, 10, 'TRUE', 1);
+    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 100, 10, 'TRUE', 4);
     INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 50, 20, 'TRUE', 2);
     INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 25, 30, 'TRUE', 3);
-    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 15, 40, 'FALSE', 4);
-    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 10, 50, 'TRUE', 5);
-    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 5, 60, 'FALSE', 6);
+    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 15, 40, 'FALSE', 5);
+    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 10, 50, 'TRUE', 3);
+    INSERT INTO TB_GIVEWIN_CUPOM (id_cupom, quantidade, valor_desconto, cupom_ativo, id_parceiro) VALUES (seq_tb_givewin_cupom.NEXTVAL, 5, 60, 'FALSE', 1);
     
     
     -- TB_GIVEWIN_DOACAO
@@ -49,14 +49,14 @@ BEGIN
     INSERT INTO TB_GIVEWIN_DOACAO (id_doacao, id_tipo_doacao,id_doador,id_receptor) VALUES (seq_tb_givewin_doacao.NEXTVAL,2,7,2);
     INSERT INTO TB_GIVEWIN_DOACAO (id_doacao, id_tipo_doacao,id_doador,id_receptor) VALUES (seq_tb_givewin_doacao.NEXTVAL,1,2,2);
 
-    -- TB_GIVEWIN_CUPONS_DOADOR
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 3, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 2, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 6, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 3, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 5, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 1, DBMS_RANDOM.STRING('X', 13), SYSDATE);
-    INSERT INTO TB_GIVEWIN_CUPONS_DOADOR (id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupons_doador.NEXTVAL, 2, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    -- TB_GIVEWIN_CUPOM_DOADOR
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 2, 3, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 2, 1, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 6, 2, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 3, 4, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 5, 2, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 4, 5, DBMS_RANDOM.STRING('X', 13), SYSDATE);
+    INSERT INTO TB_GIVEWIN_CUPOM_DOADOR (id_cupom_doador, id_cupom, id_doador, codigo_gerado, dt_utilizacao) VALUES (seq_tb_givewin_cupom_doador.NEXTVAL, 2, 1, DBMS_RANDOM.STRING('X', 13), SYSDATE);
 EXCEPTION
     WHEN DUP_VAL_ON_INDEX THEN 
         DECLARE
