@@ -50,6 +50,7 @@ CREATE TABLE TB_GIVEWIN_CUPOM (
 );
 
 CREATE TABLE TB_GIVEWIN_CUPONS_DOADOR (
+    id_cupom_doador NUMBER,
     id_cupom NUMBER,
     id_doador NUMBER,
     codigo_gerado VARCHAR(255),
@@ -60,7 +61,7 @@ CREATE TABLE TB_GIVEWIN_CUPONS_DOADOR (
 );
 
 CREATE TABLE TB_GIVEWIN_ERROS (
-    id NUMBER, 
+    id_erro NUMBER, 
     data_erro DATE, 
     cod_erro NUMBER, 
     desc_erro VARCHAR(2000)
