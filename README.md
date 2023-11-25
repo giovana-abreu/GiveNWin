@@ -2,6 +2,8 @@
 
 > A GiveNWin é uma plataforma de incentivo a doações de sangue, plasma, plaquetas, medula, órgãos, tecidos, cabelo, leite materno, medicamentos e EPIs, oferecendo ao doador em troca beneficios como desconto em lojas parceiras
 
+### Instruções para acesso aos entregaveis de IA
+
 ## 💻 Sistemas utilizados
 
 - WOKWI
