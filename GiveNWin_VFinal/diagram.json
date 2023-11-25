@@ -1,0 +1,51 @@
+{
+  "version": 1,
+  "author": "Giovana Abreu",
+  "editor": "wokwi",
+  "parts": [
+    { "type": "board-esp32-devkit-c-v4", "id": "esp", "top": 67.2, "left": 254.44, "attrs": {} },
+    {
+      "type": "wokwi-ili9341",
+      "id": "lcd1",
+      "top": 24.6,
+      "left": 500.9,
+      "rotate": 90,
+      "attrs": {}
+    },
+    { "type": "wokwi-pir-motion-sensor", "id": "pir1", "top": -53.6, "left": 309.42, "attrs": {} },
+    {
+      "type": "wokwi-led",
+      "id": "led1",
+      "top": 44.4,
+      "left": 445.4,
+      "attrs": { "color": "yellow" }
+    },
+    {
+      "type": "wokwi-led",
+      "id": "led2",
+      "top": 44.4,
+      "left": 474.2,
+      "attrs": { "color": "green" }
+    }
+  ],
+  "connections": [
+    [ "esp:TX", "$serialMonitor:RX", "", [] ],
+    [ "esp:RX", "$serialMonitor:TX", "", [] ],
+    [ "lcd1:GND", "esp:GND.2", "black", [ "h-28.8", "v-67.2" ] ],
+    [ "esp:23", "lcd1:MOSI", "green", [ "h19.2", "v86.4" ] ],
+    [ "lcd1:CS", "esp:15", "green", [ "h-28.8", "v9.6" ] ],
+    [ "lcd1:RST", "esp:4", "green", [ "h-19.2", "v28.8" ] ],
+    [ "lcd1:D/C", "esp:2", "green", [ "h-19.2", "v38.4" ] ],
+    [ "lcd1:SCK", "esp:18", "green", [ "h-57.6", "v-38.41" ] ],
+    [ "lcd1:MISO", "esp:19", "green", [ "h-9.6", "v9.59" ] ],
+    [ "pir1:GND", "esp:GND.2", "black", [ "v38.4", "h-0.26", "v19.2" ] ],
+    [ "led1:A", "esp:13", "green", [ "v240", "h-211.35" ] ],
+    [ "led1:C", "esp:GND.1", "green", [ "v0" ] ],
+    [ "pir1:OUT", "esp:22", "green", [ "v134.4", "h-0.14" ] ],
+    [ "lcd1:VCC", "esp:5V", "red", [ "h-57.6", "v153.6", "h-153.6", "v-19.2" ] ],
+    [ "pir1:VCC", "esp:5V", "red", [ "v19.2", "h-105.6", "v115.2", "h0", "v96" ] ],
+    [ "led2:A", "esp:5", "green", [ "h-67.2", "v96" ] ],
+    [ "led2:C", "esp:GND.2", "green", [ "v0" ] ]
+  ],
+  "dependencies": {}
+}
